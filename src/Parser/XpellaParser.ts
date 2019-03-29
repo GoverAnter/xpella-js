@@ -142,6 +142,7 @@ export class XpellaParser extends XpellaAbstractExpressionParser {
       }
 
       if (this.inputStream.peek() === '(') {
+        // TODO Handle const methods, to prevent side-effects compile-time
         // This is a method declaration
         this.currentFunctionExpectedReturnType = type;
         const args = this.parseSimpleVariableDeclarationList(typeName);
