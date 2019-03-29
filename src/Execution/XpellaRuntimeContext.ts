@@ -1,4 +1,5 @@
 import { XpellaRuntimeVariable } from './Runtime/XpellaRuntimeVariable';
+import { RuntimeTypes } from './XpellaExecutor';
 
 // Exception codes:
 // Current file: XP10xx
@@ -8,6 +9,8 @@ export class XpellaRuntimeContext {
 
   private functionScopes: Array<{ [name: string]: any }> = [];
   private objectScopes: string[] = [];
+
+  public types: RuntimeTypes;
 
   public currentlyFunctionScoped(): boolean {
     return this.functionScopes.length !== 0;
