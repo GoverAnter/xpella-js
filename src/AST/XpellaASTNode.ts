@@ -32,4 +32,6 @@ export abstract class XpellaASTNode {
 
     return true;
   }
+
+  public abstract equals(other: XpellaASTNode): boolean;
 }

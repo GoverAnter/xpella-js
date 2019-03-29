@@ -1,5 +1,6 @@
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
@@ -28,5 +29,17 @@ export class XpellaASTVariable extends XpellaASTExpression {
   constructor(annotations: XpellaASTAnnotation[], documentation: string, resolvedType: string, identifier: string) {
     super(annotations, documentation, resolvedType);
     this.identifier = identifier;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTVariable {
+    return other instanceof XpellaASTVariable;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTVariable.isInstance(other)) {
+      return other.identifier === this.identifier;
+    } else {
+      return false;
+    }
   }
 }

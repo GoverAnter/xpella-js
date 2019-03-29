@@ -2,6 +2,7 @@ import { XpellaASTStatement } from './XpellaASTStatement';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTVariable } from './XpellaASTVariable';
 import { XpellaASTExpression } from './XpellaASTExpression';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 import { XpellaASTObjectCallMember } from './XpellaASTObjectCallMember';
@@ -36,5 +37,17 @@ export class XpellaASTAssignment extends XpellaASTStatement {
     super(annotations, documentation);
     this.variable = variable;
     this.expression = expression;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTAssignment {
+    return other instanceof XpellaASTAssignment;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTAssignment.isInstance(other)) {
+      return other.expression.equals(this.expression) && other.variable.equals(this.variable);
+    } else {
+      return false;
+    }
   }
 }

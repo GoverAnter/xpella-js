@@ -1,6 +1,7 @@
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTOperator } from './XpellaASTOperator';
+import { XpellaASTNode } from './XpellaASTNode';
 import { XpellaParserExpressionOperatorsArray } from '../Parser/Definitions/XpellaKeywords';
 
 import { encode, decode, Codec } from 'msgpack-lite';
@@ -38,5 +39,19 @@ export class XpellaASTExpressionOperator extends XpellaASTOperator {
     super(annotations, documentation, resolvedType, operator);
     this.left = left;
     this.right = right;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTExpressionOperator {
+    return other instanceof XpellaASTExpressionOperator;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTExpressionOperator.isInstance(other)) {
+      return other.operator === this.operator &&
+        other.left.equals(this.left) &&
+        other.right.equals(this.right);
+    } else {
+      return false;
+    }
   }
 }

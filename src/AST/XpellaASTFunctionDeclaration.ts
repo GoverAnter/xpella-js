@@ -1,9 +1,10 @@
 import { XpellaASTDeclaration } from './XpellaASTDeclaration';
-import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTBlock } from './XpellaASTBlock';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
-import { XpellaParserVisibilities } from '../Parser/Definitions/XpellaKeywords';
+import { XpellaASTNode } from './XpellaASTNode';
 import { XpellaASTVariableDeclaration } from './XpellaASTVariableDeclaration';
+
+import { XpellaParserVisibilities } from '../Parser/Definitions/XpellaKeywords';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
@@ -61,5 +62,22 @@ export class XpellaASTFunctionDeclaration extends XpellaASTDeclaration {
     this.returnType = returnType;
     this.args = args;
     this.execution = execution;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTFunctionDeclaration {
+    return other instanceof XpellaASTFunctionDeclaration;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTFunctionDeclaration.isInstance(other) && other.args.length === this.args.length && other.modifiers.length === this.modifiers.length) {
+      return other.identifier === this.identifier &&
+        other.visibility === this.visibility &&
+        other.modifiers.every((val, i) => val == this.modifiers[i]) &&
+        other.returnType === this.returnType &&
+        other.args.every((val, i) => val.equals(this.args[i])) &&
+        other.execution.equals(this.execution);
+    } else {
+      return false;
+    }
   }
 }

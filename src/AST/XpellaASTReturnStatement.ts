@@ -1,6 +1,7 @@
 import { XpellaASTStatement } from './XpellaASTStatement';
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
@@ -33,13 +34,13 @@ export class XpellaASTReturnStatement extends XpellaASTStatement {
     this.expression = expression;
   }
 
-  public equals(other: XpellaASTStatement): boolean {
-    if (other instanceof XpellaASTReturnStatement && this.compareAnnotations(other)) {
-      if (this.expression) {
-        return this.expression.equals(other.expression);
-      } else {
-        return this.expression === other.expression;
-      }
+  public static isInstance(other: XpellaASTNode): other is XpellaASTReturnStatement {
+    return other instanceof XpellaASTReturnStatement;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTReturnStatement.isInstance(other)) {
+      return (other.expression !== null && other.expression.equals(this.expression)) || this.expression == null;
     } else {
       return false;
     }

@@ -1,5 +1,6 @@
 import { XpellaASTStatement } from './XpellaASTStatement';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
@@ -30,5 +31,17 @@ export class XpellaASTBlock extends XpellaASTStatement {
   constructor(annotations: XpellaASTAnnotation[], documentation: string, statements: XpellaASTStatement[]) {
     super(annotations, documentation);
     this.statements = statements;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTBlock {
+    return other instanceof XpellaASTBlock;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTBlock.isInstance(other) && other.statements.length == this.statements.length) {
+      return other.statements.every((val, i) => val.equals(this.statements[i]));
+    } else {
+      return false;
+    }
   }
 }

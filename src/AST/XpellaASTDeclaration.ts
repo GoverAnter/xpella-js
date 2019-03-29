@@ -8,6 +8,4 @@ export abstract class XpellaASTDeclaration extends XpellaASTNode {
     super(annotations, documentation);
     this.identifier = identifier;
   }
-
-  public abstract equals(other: XpellaASTDeclaration): boolean;
 }

@@ -1,12 +1,12 @@
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTOperator } from './XpellaASTOperator';
 import { XpellaASTVariable } from './XpellaASTVariable';
+import { XpellaASTNode } from './XpellaASTNode';
 import { XpellaParserBackOperators } from '../Parser/Definitions/XpellaKeywords';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
 export class XpellaASTBackOperator extends XpellaASTOperator {
-
   public static toBinaryAST(obj: XpellaASTBackOperator, codec: Codec) {
     // small ints are more efficient than string, that's why we store operators as an index
     const array: any[] = [XpellaParserBackOperators.indexOf(obj.operator), obj.right];
@@ -36,5 +36,17 @@ export class XpellaASTBackOperator extends XpellaASTOperator {
               right: XpellaASTVariable) {
     super(annotations, documentation, resolvedType, operator);
     this.right = right;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTBackOperator {
+    return other instanceof XpellaASTBackOperator;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTBackOperator.isInstance(other)) {
+      return other.operator === this.operator && other.right.equals(this.right);
+    } else {
+      return false;
+    }
   }
 }

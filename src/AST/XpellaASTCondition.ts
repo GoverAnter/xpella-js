@@ -1,11 +1,11 @@
 import { XpellaASTStatement } from './XpellaASTStatement';
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
 export class XpellaASTCondition extends XpellaASTStatement {
-
   public static toBinaryAST(obj: XpellaASTCondition, codec: Codec) {
     const array: any[] = [obj.condition, obj.passConditionExecution, obj.failConditionExecution];
     const runtimeAnnotations = obj.getRuntimeAnnotations();
@@ -37,5 +37,19 @@ export class XpellaASTCondition extends XpellaASTStatement {
     this.condition = condition;
     this.passConditionExecution = passConditionExecution;
     this.failConditionExecution = failConditionExecution;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTCondition {
+    return other instanceof XpellaASTCondition;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTCondition.isInstance(other)) {
+      return other.condition.equals(this.condition) &&
+        ((other.passConditionExecution !== null && other.passConditionExecution.equals(this.passConditionExecution)) || this.passConditionExecution == null) &&
+        ((other.failConditionExecution !== null && other.failConditionExecution.equals(this.failConditionExecution)) || this.failConditionExecution == null);
+    } else {
+      return false;
+    }
   }
 }

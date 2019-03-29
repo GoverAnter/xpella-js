@@ -2,9 +2,11 @@ import { XpellaASTDeclaration } from './XpellaASTDeclaration';
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTLiteral } from './XpellaASTLiteral';
+import { XpellaASTNode } from './XpellaASTNode';
+
+import { XpellaParserVisibilities } from '../Parser/Definitions/XpellaKeywords';
 
 import { encode, decode, Codec } from 'msgpack-lite';
-import { XpellaParserVisibilities } from '../Parser/Definitions/XpellaKeywords';
 
 export class XpellaASTVariableDeclaration extends XpellaASTDeclaration {
 
@@ -46,5 +48,21 @@ export class XpellaASTVariableDeclaration extends XpellaASTDeclaration {
     this.visibility = visibility;
     this.modifiers = modifiers;
     this.initialAssignation = initialAssignation;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTVariableDeclaration {
+    return other instanceof XpellaASTVariableDeclaration;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTVariableDeclaration.isInstance(other) && other.modifiers.length === this.modifiers.length) {
+      return other.identifier === this.identifier &&
+        other.type === this.type &&
+        other.visibility === this.visibility &&
+        other.modifiers.every((val, i) => val === this.modifiers[i]) &&
+        ((other.initialAssignation !== null && other.initialAssignation.equals(this.initialAssignation)) || this.initialAssignation == null);
+    } else {
+      return false;
+    }
   }
 }

@@ -2,6 +2,7 @@ import { XpellaASTObjectCall } from './XpellaASTObjectCall';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTExpression } from './XpellaASTExpression';
 import { XpellaASTVariable } from './XpellaASTVariable';
+import { XpellaASTNode } from './XpellaASTNode';
 
 import { encode, decode, Codec } from 'msgpack-lite';
 
@@ -32,5 +33,17 @@ export class XpellaASTObjectCallMember extends XpellaASTObjectCall {
               member: XpellaASTVariable) {
     super(annotations, documentation, member.resolvedType, object);
     this.member = member;
+  }
+
+  public static isInstance(other: XpellaASTNode): other is XpellaASTObjectCallMember {
+    return other instanceof XpellaASTObjectCallMember;
+  }
+
+  public equals(other: XpellaASTNode): boolean {
+    if (XpellaASTObjectCallMember.isInstance(other)) {
+      return other.object.equals(this.object) && other.member.equals(this.member);
+    } else {
+      return false;
+    }
   }
 }
