@@ -2,7 +2,7 @@
 
 ## Motivations
 
-I needed to have a language that could be run on multiple platform (including browser), and that was completely isolated from its parent environment.
+I needed to have a language that could be run on multiple platform (including browser), and that is completely isolated from its parent environment.
 
 The only solution that matched these criterias was a custom language.
 
