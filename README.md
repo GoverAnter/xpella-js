@@ -6,6 +6,9 @@ I needed to have a language that could be run on multiple platform (including br
 
 The only solution that matched these criterias was a custom language.
 
+Another important point of this language was to make it possible to be run with the same context, like a stateful program, with a one-time initialization.
+The idea behind that was to create a "cheap" (computational and database-wise) FaaS (Function as a Service) by only reusing the same context.
+
 ## What it does
 
 Like a lot of other languages, it parses a source code input to create an AST (Abstract Syntax Tree).
@@ -15,9 +18,8 @@ This AST could then be stored to be run anywhere. It is transformed to binary us
 
 The parser is about 90% finished, what remains to do is loops, and handle some edge cases in the syntax.
 
-Runtime is nowhere near done !
-The main problem is the maximum call stack size of many languages, including Javascript.
-Either it needs a stack guard, but this pattern is inefficient, or it needs to be transpiled, but that last point is not best due to the needed ability to run it on multiple host languages.
+Runtime is WIP !
+For now, i will do a simple executor oriented runtime, but i may in the future implement transpilers to other (host) languages, if call stack size is really a huge problem.
 
 ## How to test it
 
