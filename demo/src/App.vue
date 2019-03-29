@@ -2,9 +2,13 @@
   <div id="app">
     <vue-prism-editor v-model="code" language="java" :line-numbers="true"></vue-prism-editor>
     <button @click="compile">Compile code</button>
+    <button v-show="program" @click="run">Run code</button>
     <div v-if="error">
       <div>{{ error }}</div>
       <div style="white-space: pre;">{{ error.stack }}</div>
+    </div>
+    <div v-show="runResult">
+      {{ runResult }}
     </div>
     <div v-show="program">
       Main methods :
@@ -23,6 +27,8 @@ import VuePrismEditor from 'vue-prism-editor';
 import 'prismjs';
 import 'vue-prism-editor/dist/VuePrismEditor.css'; // import the styles
 import { XpellaASTProgram } from '../../src/AST/XpellaASTProgram';
+import { XpellaExecutor } from '../../src/Execution/XpellaExecutor';
+import { XpellaRuntimeContext } from '../../src/Execution/XpellaRuntimeContext';
 
 @Component({ components: { VuePrismEditor }})
 export default class App extends Vue {
@@ -32,6 +38,8 @@ export default class App extends Vue {
   public ast: string = '';
   public error: Error = null;
 
+  public runResult: any = null;
+
   get mainMethods(): string[] {
     return this.program ? this.program.getMainMethodTypes().map((t) => t + '.main()') : [];
   }
@@ -40,12 +48,29 @@ export default class App extends Vue {
     this.ast = '';
     this.program = null;
     this.error = null;
+    this.runResult = null;
     const parser = new XpellaParser(this.code);
     try {
       this.program = parser.executeParse();
-      this.ast = JSON.stringify(this.program, null, 2);
+      this.ast = JSON.stringify(this.program, (key, val) => {
+        if (key === 'annotations' && (!val || val.length === 0) ||
+          key === 'documentation' && !val) {
+          return undefined;
+        } else {
+          return val;
+        }
+      }, 2);
     } catch (e) {
       this.error = e;
+    }
+  }
+
+  public run(): void {
+    const executor = new XpellaExecutor(this.program, []);
+    try {
+      this.runResult = executor.run(new XpellaRuntimeContext(), { type: 'Test', method: 'main' }, []);
+    } catch(error) {
+      this.error = error;
     }
   }
 }

@@ -3,10 +3,11 @@ import { XpellaRuntimeContext } from './XpellaRuntimeContext';
 import { XpellaRuntimeFunction } from './Runtime/XpellaRuntimeFunction';
 import { XpellaRuntimeType } from './Runtime/XpellaRuntimeType';
 
+export interface RuntimeTypes { [typeName: string]: XpellaRuntimeType };
+
 export class XpellaExecutor {
   public originalAST: XpellaASTProgram;
-  private executionHandler: (context: XpellaRuntimeContext) => any;
-  private types: { [typeName: string]: XpellaRuntimeType } = {};
+  private types: RuntimeTypes = {};
 
   constructor(ast: XpellaASTProgram, libraries: XpellaRuntimeType[][]) {
     this.originalAST = ast;
@@ -37,10 +38,13 @@ export class XpellaExecutor {
           methods.push(func);
         }
       }
+
+      this.types[type.identifier] = new XpellaRuntimeType([], type.identifier, constructors, operators, methods);
     }
   }
 
-  public run(context: XpellaRuntimeContext): any {
-    return this.executionHandler(context);
+  public run(context: XpellaRuntimeContext, entryPoint: { type: string, method: string }, args: any[]): any {
+    context.types = this.types;
+    return this.types[entryPoint.type].methods.find((val) => val.identifier == entryPoint.method).handler(context);
   }
 }

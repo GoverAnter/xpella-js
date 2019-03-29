@@ -9,7 +9,15 @@ export class XpellaRuntimeType {
   public operators: XpellaRuntimeFunction[];
   public methods: XpellaRuntimeFunction[];
 
-  constructor(identifier: string) {
+  constructor(annotations: XpellaRuntimeAnnotation[],
+    identifier: string,
+    constructors: XpellaRuntimeFunction[],
+    operators: XpellaRuntimeFunction[],
+    methods: XpellaRuntimeFunction[]) {
+    this.annotations = annotations;
     this.identifier = identifier;
+    this.constructors = constructors;
+    this.operators = operators;
+    this.methods = methods;
   }
 }
