@@ -1,7 +1,8 @@
 import { XpellaASTProgram } from '../AST/XpellaASTProgram';
 import { XpellaRuntimeContext } from './Runtime/context/XpellaRuntimeContext';
 import { XpellaRuntimeFunction } from './Runtime/XpellaRuntimeFunction';
-import { XpellaRuntimeType } from './Runtime/XpellaRuntimeType';
+import { XpellaRuntimeType } from './Runtime/types/XpellaRuntimeType';
+import { XpellaRuntimePrimitiveInt } from './Runtime/types/XpellaRuntimePrimitiveInt';
 
 export interface RuntimeTypes { [typeName: string]: XpellaRuntimeType };
 
@@ -11,6 +12,9 @@ export class XpellaExecutor {
 
   constructor(ast: XpellaASTProgram, libraries: XpellaRuntimeType[][]) {
     this.originalAST = ast;
+
+    // Add the language internal types
+    libraries.push([new XpellaRuntimePrimitiveInt()]);
 
     libraries.forEach((lib) => {
       lib.forEach((type) => this.types[type.identifier] = type);
@@ -45,6 +49,6 @@ export class XpellaExecutor {
 
   public run(context: XpellaRuntimeContext, entryPoint: { type: string, method: string }, args: any[]): any {
     context.types = this.types;
-    return this.types[entryPoint.type].methods.find((val) => val.identifier == entryPoint.method).handler(context);
+    return this.types[entryPoint.type].methods.find((val) => val.identifier == entryPoint.method).call(context, [], false);
   }
 }

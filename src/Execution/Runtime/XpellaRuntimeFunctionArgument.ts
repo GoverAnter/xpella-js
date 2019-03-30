@@ -1,5 +1,5 @@
 import { XpellaRuntimeVariableMetadatas } from './XpellaRuntimeVariableMetadatas';
-import { XpellaRuntimeType } from './XpellaRuntimeType';
+import { XpellaRuntimeType } from './types/XpellaRuntimeType';
 import { XpellaRuntimeVisibility } from './XpellaRuntimeVisibility';
 import { XpellaRuntimeHandler } from './XpellaRuntimeHandler';
 import { XpellaASTVariableDeclaration } from '../../AST/XpellaASTVariableDeclaration';

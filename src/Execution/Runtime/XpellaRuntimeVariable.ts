@@ -1,4 +1,4 @@
-import { XpellaRuntimeType } from './XpellaRuntimeType';
+import { XpellaRuntimeType } from './types/XpellaRuntimeType';
 import { XpellaRuntimeVisibility } from './XpellaRuntimeVisibility';
 import { XpellaRuntimeVariableMetadatas } from './XpellaRuntimeVariableMetadatas';
 

@@ -35,6 +35,17 @@ export class XpellaRuntimeFunction {
     this.handler = handler;
   }
 
+  /**
+   * Runs the handler of the method with proper context and arguments handling.
+   * 
+   * The arguments MUST be resolved : the args array must have the same type/order as the args of this function.
+   * 
+   * //// RUNTIME METHOD
+   * @param context The runtime context to execute this function against
+   * @param args The arguments of the function to call
+   * @param prepareArgs Whether arguments need to be transformed into function args, see prepareArgs method
+   * @see XpellaRuntimeFunction.prepareArgs
+   */
   public call(context: XpellaRuntimeContext, args: XpellaRuntimeVariable[], prepareArgs: boolean = true): any {
     if (prepareArgs) {
       // This should be done compile-time, but we may need to do it runtime in some places
@@ -43,15 +54,19 @@ export class XpellaRuntimeFunction {
 
     context.createMaskingScope(args);
 
-    this.handler(context);
+    const retVal = this.handler(context);
 
     context.removeMaskingScope();
+
+    return retVal;
   }
 
   /**
    * Transforms an array of variables (the arguments of the method) to the arguments themselves.
    * The return array will then be used when calling a function to create the masking scope.
    * Context argument is only here when there are defaults : these defaults are handlers that must be executed to get the initial value.
+   * 
+   * //// RUNTIME METHOD
    */
   public prepareArgs(args: XpellaRuntimeVariable[], context: XpellaRuntimeContext) : XpellaRuntimeVariable[] {
     // Prepare arguments (create new variables from them to assign them their scoped identifier)

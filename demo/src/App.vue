@@ -10,6 +10,9 @@
     <div v-show="runResult">
       {{ runResult }}
     </div>
+    <div>
+      Executed in {{ elapsed }} ms
+    </div>
     <div v-show="program">
       Main methods :
       <ul>
@@ -28,7 +31,7 @@ import 'prismjs';
 import 'vue-prism-editor/dist/VuePrismEditor.css'; // import the styles
 import { XpellaASTProgram } from '../../src/AST/XpellaASTProgram';
 import { XpellaExecutor } from '../../src/Execution/XpellaExecutor';
-import { XpellaRuntimeContext } from '../../src/Execution/XpellaRuntimeContext';
+import { XpellaRuntimeContext } from '../../src/Execution/Runtime/context/XpellaRuntimeContext';
 
 @Component({ components: { VuePrismEditor }})
 export default class App extends Vue {
@@ -39,6 +42,7 @@ export default class App extends Vue {
   public error: Error = null;
 
   public runResult: any = null;
+  public elapsed: number = 0;
 
   get mainMethods(): string[] {
     return this.program ? this.program.getMainMethodTypes().map((t) => t + '.main()') : [];
@@ -67,11 +71,13 @@ export default class App extends Vue {
 
   public run(): void {
     const executor = new XpellaExecutor(this.program, []);
+    const start = Date.now();
     try {
       this.runResult = executor.run(new XpellaRuntimeContext(), { type: 'Test', method: 'main' }, []);
     } catch(error) {
       this.error = error;
     }
+    this.elapsed = Date.now() - start;
   }
 }
 </script>
