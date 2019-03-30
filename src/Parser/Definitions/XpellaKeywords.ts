@@ -5,6 +5,8 @@ export const XpellaParserConstructs = [
   'do',
   'while',
   'switch',
+  'case',
+  'default',
   'try',
   'catch',
   'finally'
