@@ -4,11 +4,28 @@ import { XpellaRuntimeVariable } from "../XpellaRuntimeVariable";
 
 // Exception codes:
 // Current file: XP10xx
-// Last exception: XP1005
+// Last exception: XP1006
 export class XpellaRuntimeContext {
   private memory: XpellaContextScope[] = [];
+  private thisContext: XpellaRuntimeVariable;
 
   public types: RuntimeTypes;
+
+  public setThisContext(thisContext: XpellaRuntimeVariable): void {
+    this.thisContext = thisContext;
+  }
+
+  public getThisContext(): XpellaRuntimeVariable {
+    if (this.thisContext) {
+      return this.thisContext;
+    } else {
+      throw new Error('XP1006: No this context available');
+    }
+  }
+
+  public clearThisContext(): void {
+    this.thisContext = null;
+  }
 
   public getCurrentScope(): XpellaContextScope {
     if (this.memory.length === 0) {
