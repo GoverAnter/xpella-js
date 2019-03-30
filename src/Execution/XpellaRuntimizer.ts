@@ -7,7 +7,7 @@ import { XpellaASTFrontOperator } from '../AST/XpellaASTFrontOperator';
 import { RuntimeTypes } from './XpellaExecutor';
 import { XpellaASTVariableDeclaration } from '../AST/XpellaASTVariableDeclaration';
 import { XpellaRuntimeVariable } from './Runtime/XpellaRuntimeVariable';
-import { XpellaRuntimeContext } from './XpellaRuntimeContext';
+import { XpellaRuntimeContext } from './Runtime/context/XpellaRuntimeContext';
 
 export function runtimizeBlock(block: XpellaASTBlock): XpellaRuntimeHandler {
   // TODO Handle edge cases (no statements or null array)

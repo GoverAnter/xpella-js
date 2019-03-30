@@ -1,5 +1,5 @@
 import { XpellaASTProgram } from '../AST/XpellaASTProgram';
-import { XpellaRuntimeContext } from './XpellaRuntimeContext';
+import { XpellaRuntimeContext } from './Runtime/context/XpellaRuntimeContext';
 import { XpellaRuntimeFunction } from './Runtime/XpellaRuntimeFunction';
 import { XpellaRuntimeType } from './Runtime/XpellaRuntimeType';
 
