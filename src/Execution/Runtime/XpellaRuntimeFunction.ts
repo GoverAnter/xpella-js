@@ -1,5 +1,4 @@
 import { XpellaRuntimeVisibility, parserVisibilityToRuntimeVisibility } from './XpellaRuntimeVisibility';
-import { XpellaRuntimeType } from './XpellaRuntimeType';
 import { XpellaRuntimeFunctionArgument } from './XpellaRuntimeFunctionArgument';
 import { XpellaRuntimeHandler } from './XpellaRuntimeHandler';
 import { XpellaASTFunctionDeclaration } from '../../AST/XpellaASTFunctionDeclaration';
