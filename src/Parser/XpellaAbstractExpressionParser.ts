@@ -23,13 +23,7 @@ import { XpellaASTStaticType } from '../AST/XpellaASTStaticType';
 // Last exception: XP0211
 export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVariableParser {
   public parseExpression(precedence: number = 0): XpellaASTExpression {
-    this.logger.group();
-    this.logger.group();
-    const initialExpression = this.parseNextExpression();
-    this.logger.groupEnd();
-    const solvedExpression = this.solveExpression(initialExpression, precedence);
-    this.logger.groupEnd();
-    return solvedExpression;
+    return this.solveExpression(this.parseNextExpression(), precedence);
   }
 
   public parseExpressionList(openChar: string = '(', closeChar: string = ')', delimiter: string = ',')
@@ -58,18 +52,15 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
   }
 
   public solveExpression(lhs: XpellaASTExpression, lastOperatorPrecedence: number = 0): XpellaASTExpression {
-    this.logger.debug('Solving expression with last operator precedence ' + lastOperatorPrecedence);
     this.lexer.skipWhitespaces(false); // Eat whitespaces
     // Peek operator
     const initialPosition = this.inputStream.getCurrentPosition();
     const operator = this.lexer.readOperator();
 
     if (operator) {
-      this.logger.debug('Found an operator');
       // Get precedence
       const precedence = XpellaParserExpressionOperators[operator];
       if (!precedence) {
-        this.logger.debug('Operator is valid but is not an expression operator');
         let opType = 'unknown operator';
         if (XpellaParserStatementOperators.some((op) => op === operator)) {
           opType = 'statement operator';
@@ -92,8 +83,6 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
                                     + lhs.resolvedType + '"',
                                  operator.length);
         }
-        this.logger.debug('Next operator precedence is higher than current, solving it');
-        this.logger.group(); // Final solve
         const rhsPosition = this.inputStream.getCurrentPosition();
         const rhs = this.parseExpression(precedence);
         if ((!isEqualityComparison || lhsType.identifier !== rhs.resolvedType)
@@ -105,33 +94,25 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
         const solved = this.solveExpression(
           new XpellaASTExpressionOperator([], '', isComparison ? 'boolean' : lhs.resolvedType, operator, lhs, rhs),
           lastOperatorPrecedence);
-        this.logger.groupEnd();
         return solved;
       } else {
-        this.logger.debug('Next operator precedence is lower or equal, rewinding');
         // As we should peek, rewind
         this.inputStream.rewind(initialPosition);
       }
     }
-    this.logger.debug('Returning LHS');
     return lhs;
   }
 
   public parseNextExpression(readForBackOperator: boolean = false): XpellaASTExpression {
-    this.logger.debug('Parsing next expression');
     this.lexer.skipWhitespaces(false); // Eat whitespaces
 
     // If this word is a back operator, and back operator is allowed here
     // parse next expression to complete the expression loop
     if (!readForBackOperator) {
-      this.logger.debug('Searching for a back operator');
       const operator = this.lexer.readOperator();
       if (operator) {
         if (this.lexer.isBackOperator(operator)) {
-          this.logger.debug('Found a valid back operator, parsing its associated variable');
-          this.logger.group();
           const expr = this.parseNextExpression(true) as XpellaASTVariable;
-          this.logger.groupEnd();
           const exprType = this.getType(expr.resolvedType);
           if (!exprType.operators[operator] || !exprType.operators[operator].back) {
             this.inputStream.throw('XP0207: Type "' + expr.resolvedType +
@@ -139,11 +120,9 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
           }
           return new XpellaASTBackOperator([], '', expr.resolvedType, operator, expr);
         } else {
-          this.logger.debug('Found an operator, but it is not a valid back operator');
           this.inputStream.throw('XP0200: Expected expression, got operator instead', operator.length);
         }
       }
-      this.logger.debug('No back operator found, continuing');
     }
 
     let expression: XpellaASTExpression;
@@ -151,14 +130,11 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
     // Test if this is a string literal, in this case readWord won't help us
     if (XpellaParserStringDelimiters.indexOf(this.inputStream.peek()) !== -1) {
       if (readForBackOperator) {
-        this.logger.debug('Found a string literal with a back operator, throwing');
         this.inputStream.throw('XP0201: Expected variable expression for back operator, got string literal instead');
       } else {
-        this.logger.debug('Expression is a string literal, parsing it');
         expression = this.resolveStringLiteral();
       }
     } else if (!isNaN(Number(this.inputStream.peek()))) {
-      this.logger.debug('Expression is a number literal, parsing it');
       // This should be a number (either a float or an int) because an identifier can't begin with a number
       expression = this.resolveNumberLiteral();
     } else {

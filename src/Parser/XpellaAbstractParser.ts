@@ -5,7 +5,6 @@ import { XpellaParserWarning } from './XpellaParserWarning';
 import { XpellaParserOptions } from './XpellaParserOptions';
 import { XpellaParserTypeHeader } from './Header/XpellaParserTypeHeader';
 import { XpellaLanguageTypeHeaders } from './Definitions/XpellaLanguageTypeHeaders';
-import { Logger } from '../Logger';
 import { XpellaParserVariableHeader } from './Header/XpellaParserVariableHeader';
 import { XpellaASTFunctionDeclaration } from '../AST/XpellaASTFunctionDeclaration';
 import { XpellaASTVariableDeclaration } from '../AST/XpellaASTVariableDeclaration';
@@ -25,8 +24,6 @@ export abstract class XpellaAbstractParser {
 
   protected readonly defaultTypes: XpellaParserTypeHeader[] = XpellaLanguageTypeHeaders;
 
-  protected readonly logger: Logger = new Logger();
-
   protected completeScope: { [name: string]: any } = {};
   protected scopeHierarchy: Array<{ [name: string]: any }> = [{}];
 
@@ -40,7 +37,6 @@ export abstract class XpellaAbstractParser {
   constructor(code: string, options: XpellaParserOptions) {
     this.initialInput = code;
     this.options = options;
-    this.logger.setLogLevel(options.getLogLevel());
 
     this.inputStream = new XpellaInputStream(code, options);
     this.lexer = new XpellaLexer(this.inputStream, options);
