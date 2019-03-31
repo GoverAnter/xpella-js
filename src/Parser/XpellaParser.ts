@@ -590,7 +590,7 @@ export class XpellaParser extends XpellaAbstractExpressionParser {
       // Don't even check for warnings if we don't need to output them
       if (identifier === XpellaParserTypeDeclarationKeyword) {
         this.addWarning('XP040E: "' + identifier
-          + '": Identifier could be confused with the eponym type declaration keyword keyword',
+          + '": Identifier could be confused with the eponym type declaration keyword',
                         line, column);
       } else if (XpellaParserVisibilities.indexOf(identifier) !== -1) {
         this.addWarning('XP040F: "' + identifier + '": Identifier could be confused with the eponym visibility keyword',
