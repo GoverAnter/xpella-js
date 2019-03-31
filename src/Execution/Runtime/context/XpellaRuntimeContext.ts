@@ -1,12 +1,12 @@
-import { XpellaContextScope } from "./XpellaContextScope";
 import { RuntimeTypes } from "../../XpellaExecutor";
 import { XpellaRuntimeVariable } from "../XpellaRuntimeVariable";
+import { XpellaScope } from '../../../scopes/XpellaScope';
 
 // Exception codes:
 // Current file: XP10xx
 // Last exception: XP1006
 export class XpellaRuntimeContext {
-  private memory: XpellaContextScope[] = [];
+  private memory: XpellaScope<XpellaRuntimeVariable>[] = [];
   private thisContext: XpellaRuntimeVariable;
 
   public types: RuntimeTypes;
@@ -27,7 +27,7 @@ export class XpellaRuntimeContext {
     this.thisContext = null;
   }
 
-  public getCurrentScope(): XpellaContextScope {
+  public getCurrentScope(): XpellaScope<XpellaRuntimeVariable> {
     if (this.memory.length === 0) {
       throw new Error("XP1000: No scopes defined in this context");
     }
@@ -41,7 +41,7 @@ export class XpellaRuntimeContext {
    * Use *initialBindings* to put elements in its root scope.
    */
   public createMaskingScope(initialBindings?: XpellaRuntimeVariable[]): void {
-    const newScope = new XpellaContextScope();
+    const newScope = new XpellaScope<XpellaRuntimeVariable>();
 
     if (initialBindings) {
       for (const binding of initialBindings) {
