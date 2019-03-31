@@ -290,7 +290,7 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
       if (variable instanceof XpellaParserFunctionHeader) {
         // Compare args
         const functionHeader = variable as XpellaParserFunctionHeader;
-        if (!this.arrayEqual(functionHeader.args, headerArgs)) {
+        if (!this.compareArgsArrays(functionHeader.args, headerArgs)) {
           this.inputStream.rewind(initialPosition);
           this.inputStream.throw('XP020B: Expected arguments [' + functionHeader.args.join(', ')
             + '], got [' + headerArgs.join(', ') + ']');
