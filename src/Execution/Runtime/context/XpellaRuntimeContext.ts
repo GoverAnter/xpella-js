@@ -88,7 +88,7 @@ export class XpellaRuntimeContext {
     }
   }
   // TODO Shadowing options
-  /** Use this to create a new variable un memory. */
+  /** Use this to create a new variable in memory. */
   public declareMemoryValue(variable: XpellaRuntimeVariable): void {
     if (!this.getCurrentScope().createInScope(variable)) {
       throw new Error('XP1002: Variable "' + variable.identifier + '" is already declared and cannot be shadowed');
