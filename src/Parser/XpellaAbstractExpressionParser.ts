@@ -91,10 +91,9 @@ export abstract class XpellaAbstractExpressionParser extends XpellaAbstractVaria
           this.inputStream.throw('Operator "' + operator + '" from type "' +
             lhs.resolvedType + '" cannot accept type "' + rhs.resolvedType + '"');
         }
-        const solved = this.solveExpression(
+        return this.solveExpression(
           new XpellaASTExpressionOperator([], '', isComparison ? 'boolean' : lhs.resolvedType, operator, lhs, rhs),
           lastOperatorPrecedence);
-        return solved;
       } else {
         // As we should peek, rewind
         this.inputStream.rewind(initialPosition);
