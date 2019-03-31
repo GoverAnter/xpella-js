@@ -44,7 +44,7 @@ export abstract class XpellaAbstractVariableParser extends XpellaAbstractParser 
 
     if (word === 'null') {
       // The null value
-      return new XpellaASTLiteral([], '', null, null);
+      return new XpellaASTLiteral([], '', null, 'null');
     } else if (word === 'true') {
       // This is the boolean value
       return new XpellaASTLiteral([], '', true, 'boolean');
