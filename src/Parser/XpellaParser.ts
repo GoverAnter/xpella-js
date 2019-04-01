@@ -401,7 +401,7 @@ export class XpellaParser extends XpellaAbstractExpressionParser {
         const variable = this.getVariable(firstWord);
         isConst = variable.modifiers.some((id) => id === 'const');
         type = variable.type;
-        identifier = identifier;
+        identifier = firstWord;
       }
 
       if (isConst) {
