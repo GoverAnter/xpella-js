@@ -332,7 +332,7 @@ export class XpellaParser extends XpellaAbstractExpressionParser {
       && (hasOperator || this.inputStream.peek() === XpellaParserLineDelimiter);
 
     if (hasOperator && preresolvedLHS instanceof XpellaASTObjectCallMethod) {
-      this.inputStream.throw('XP041F: Cannot assign a value to a method return', possibleOperator.length);
+      this.inputStream.throw('XP041F: Cannot assign a value to a method call', possibleOperator.length);
     }
 
     if (!isDeclaration && !hasOperator) {
