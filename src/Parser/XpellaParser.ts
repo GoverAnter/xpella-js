@@ -150,7 +150,7 @@ export class XpellaParser extends XpellaAbstractExpressionParser {
         args.map((arg) => XpellaParserMemberHeader.fromDeclaration(arg)).forEach((arg) => this.createVariable(arg));
 
         this.currentThis.methods.push(new XpellaASTFunctionDeclaration([], '', name, visibility, modifiers, type,
-                                                                       args, this.parseBlock() as XpellaASTBlock));
+                                                                       args, this.parseBlock()));
         this.popScope();
         this.currentFunctionExpectedReturnType = null; // Just in case...
       } else {

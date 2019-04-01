@@ -1,5 +1,5 @@
 import { XpellaASTDeclaration } from './XpellaASTDeclaration';
-import { XpellaASTBlock } from './XpellaASTBlock';
+import { XpellaASTStatement } from './XpellaASTStatement';
 import { XpellaASTAnnotation } from './XpellaASTAnnotation';
 import { XpellaASTNode } from './XpellaASTNode';
 import { XpellaASTVariableDeclaration } from './XpellaASTVariableDeclaration';
@@ -46,7 +46,7 @@ export class XpellaASTFunctionDeclaration extends XpellaASTDeclaration {
   public modifiers: string[];
   public returnType: string;
   public args: XpellaASTVariableDeclaration[];
-  public execution: XpellaASTBlock;
+  public execution: XpellaASTStatement;
 
   constructor(annotations: XpellaASTAnnotation[],
               documentation: string,
@@ -55,7 +55,7 @@ export class XpellaASTFunctionDeclaration extends XpellaASTDeclaration {
               modifiers: string[],
               returnType: string,
               args: XpellaASTVariableDeclaration[],
-              execution: XpellaASTBlock) {
+              execution: XpellaASTStatement) {
     super(annotations, documentation, identifier);
     this.visibility = visibility;
     this.modifiers = modifiers;

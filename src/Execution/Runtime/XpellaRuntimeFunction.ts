@@ -2,7 +2,7 @@ import { XpellaRuntimeVisibility, parserVisibilityToRuntimeVisibility } from './
 import { XpellaRuntimeFunctionArgument } from './XpellaRuntimeFunctionArgument';
 import { XpellaRuntimeHandler } from './XpellaRuntimeHandler';
 import { XpellaASTFunctionDeclaration } from '../../AST/XpellaASTFunctionDeclaration';
-import { runtimizeBlock } from '../XpellaRuntimizer';
+import { runtimizeBlock, runtimizeStatement } from '../XpellaRuntimizer';
 import { XpellaRuntimeContext } from './context/XpellaRuntimeContext';
 import { XpellaRuntimeVariable } from './XpellaRuntimeVariable';
 
@@ -11,7 +11,7 @@ export class XpellaRuntimeFunction {
     return new XpellaRuntimeFunction(func.identifier,
                                      parserVisibilityToRuntimeVisibility(func.visibility),
                                      func.returnType,
-                                     runtimizeBlock(func.execution),
+                                     runtimizeStatement(func.execution),
                                      func.args.map((arg) => XpellaRuntimeFunctionArgument.fromAST(arg)));
   }
 
